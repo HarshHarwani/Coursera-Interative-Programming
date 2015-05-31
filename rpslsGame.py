@@ -41,10 +41,14 @@ def number_to_name(number):
     
 #this is actually the logic, it calculates the difference of 
 #index of player choices and accordingly prints who wins.
+count=0
 def rpsls(player_choice):
     
-    #entering a new line between consecutive games.
-    print ""
+    #entering a new line between consecutive games, 
+    #handling the case where it prints space before first execution
+    global count
+    if count is not 0:
+        print ""
     
     #logic to handle variation in cases of string entered by the user.
     player_choice=player_choice.lower()
@@ -62,6 +66,9 @@ def rpsls(player_choice):
     #getting the computer_choice using number_to_name function
     computer_choice=number_to_name(computer_index)
     print "Computer chooses"+" "+computer_choice
+    
+    #incrementing the counter,so that spaces can be printed after first execution
+    count+=1
     
     #calculating the difference of player and computer index.
     diff=(player_index-computer_index)%5
