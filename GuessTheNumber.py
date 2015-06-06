@@ -25,8 +25,10 @@ def start_game():
         num_range=1000
         num_guesses=cal_numberofGuesses(1000)
         secret_number=random.randrange(0,1000,1)
+
     print "New game. Range is from 0 to ",num_range
     print "Number of remaining guesses is",num_guesses
+    print ""
 
 '''this function calculates the appropriate number of guesses
 for a given range.'''    
@@ -39,8 +41,8 @@ def new_game():
     
 #helper function in case the game is lost    
 def lost_game():
-    print "You lost,you didnt follow binary search"
-    print "Give it one more try."
+    print "You ran out of guesses.  The number was ",secret_number
+    print ""	
     new_game()
     
 # define event handlers for control panel
@@ -63,17 +65,22 @@ def input_guess(input):
     print "Guess was ",guess
     print "Number of remaining guesses is",num_guesses
     if guess<secret_number:
-        print "Higher!"
+        if num_guesses>0.00000001:
+            print "Higher!"
     elif guess>secret_number:
-        print "Lower!"
+        if num_guesses>0.00000001:
+            print "Lower!"
     elif guess==secret_number:
         print "Correct!"
+        print ""
         new_game()
+        
+    print ""
     if num_guesses==0:
         lost_game()
 
 #create frame
-frame=simplegui.create_frame("Guess the Number!",400,400)
+frame=simplegui.create_frame("Guess the Number",200,200)
 
 #create two button for restarting the game in the desired range
 frame.add_button("Range is [0,100)",range100,200)
