@@ -40,7 +40,8 @@ def getProcessedWordsList(wordList):
         word = word.lower()
         word = word.strip()
         word = re.sub("[^a-zA-Z]", "", word);
-        processeWordList.append(word)
+        if word is not "":
+            processeWordList.append(word)
     return processeWordList
 
 
@@ -110,7 +111,7 @@ def writeTop10intoFile(outputFilename, sortedWordList, wordDict):
         if count == 10:
             break;
         fileObject.write(sortedWordList[i])
-        fileObject.write("\t\t")
+        fileObject.write("\t")
         fileObject.write(str(wordDict.get(sortedWordList[i])))
         fileObject.write("\n")
         count += 1
