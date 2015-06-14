@@ -1,27 +1,28 @@
 # @author hharwani
-
-import operator
 import re
-
 ##opening the input file and reading it
 ##returns the list of lines from the file which is read.
 def openFile(filename):
     try:
         fileObject = open(filename, 'r')
-        listOfLines = fileObject.readlines()
+    except OSError:
+        print("file path is invalid")
+        return
     except FileNotFoundError as err:
-        print(err)
+        print("File is not found at the given path",err)
         return
     except IOError as error:
+        print("Some Error occured in Inpout-Output",error)
         print(error)
         return
     except NameError as exc:
         print(exc)
         return
     else:
-        return listOfLines
-    finally:
+        listOfLines = fileObject.readlines()
         fileObject.close()
+        return listOfLines
+
 
 
 ##returns the word-list from the line-list
@@ -141,7 +142,8 @@ def writeTotalCharIntoFile(outputFilename, totalNoOfChar):
 def writeCharFrequency(outputFilename, charFrequencyDict):
     sortedList=getSortedList(charFrequencyDict)
     fileObject = open(outputFilename, 'w')
-    fileObject.write("\n")
+    fileObject.write("Various stastics of the file are as follows:")
+    fileObject.write("\n\n")
     fileObject.write("The characters and their frequency are as follows:")
     fileObject.write("\n")
     for item in sortedList:
@@ -158,49 +160,57 @@ flag = True
 
 ##Main input loop
 while flag:
-    filename = input("Enter the path of the file to be read")
-    outputFilename = input("Enter the path of the  output file")
-    if filename != "" and len(filename) > 4 and outputFilename != "":
+    filename = input("Enter the path of the file to be read\n")
+    outputFilename = input("Enter the path of the  output file\n")
+    if filename==outputFilename:
+        print("Input and output file can't be same")
+
+    if filename != "" and len(filename) > 4 and outputFilename != "" and filename!=outputFilename:
         flag = False
 
         # retieving the lines from the file.
         lineList = openFile(filename)
+        if lineList is None:
+            flag=True
 
-        # retrieving the words from those lines.
-        wordList = getWordsList(lineList)
+        if not flag:
+            # retrieving the words from those lines.
+            wordList = getWordsList(lineList)
 
-        # processing the word list, removing trailing and leading whutespaces and lowercasing
-        processedWordList = getProcessedWordsList(wordList)
+            # processing the word list, removing trailing and leading whutespaces and lowercasing
+            processedWordList = getProcessedWordsList(wordList)
 
-        # building the word dictionary
-        wordDict = buildwordDict(processedWordList)
+            # building the word dictionary
+            wordDict = buildwordDict(processedWordList)
 
-        # sorting the dictionary to get the top frequency words
-        sortedWordList = getSortedList(wordDict)
+            # sorting the dictionary to get the top frequency words
+            sortedWordList = getSortedList(wordDict)
 
-        # building the character dictionary
-        charDict = buildCharDict(processedWordList)
+            # building the character dictionary
+            charDict = buildCharDict(processedWordList)
 
-        # sorting the dictionary to get frequency of the characters as percentage
-        sortedCharList = getSortedList(charDict)
+            # sorting the dictionary to get frequency of the characters as percentage
+            sortedCharList = getSortedList(charDict)
 
-        # getting the total no of non-white space characters.
-        totalNoOfChar = getTotalNoChar(charDict)
+            # getting the total no of non-white space characters.
+            totalNoOfChar = getTotalNoChar(charDict)
 
-        # calculating the frequency as percentage for each of the characters
-        charFrequencyDict = getFrequencyPerc(sortedCharList, charDict, totalNoOfChar)
+            # calculating the frequency as percentage for each of the characters
+            charFrequencyDict = getFrequencyPerc(sortedCharList, charDict, totalNoOfChar)
 
-        # writing the frequency of different characters in the file
-        writeCharFrequency(outputFilename, charFrequencyDict)
+            # writing the frequency of different characters in the file
+            writeCharFrequency(outputFilename, charFrequencyDict)
 
-        # writing the top 10 words in the file
-        writeTop10intoFile(outputFilename, sortedWordList, wordDict)
+            # writing the top 10 words in the file
+            writeTop10intoFile(outputFilename, sortedWordList, wordDict)
 
-        # writing total number of words in the file.
-        writeTotalWordsIntoFile(outputFilename, wordList)
+            # writing total number of words in the file.
+            writeTotalWordsIntoFile(outputFilename, wordList)
 
-        # writing the total no of non-whitespace characters in the file.
-        writeTotalCharIntoFile(outputFilename, totalNoOfChar)
+            # writing the total no of non-whitespace characters in the file.
+            writeTotalCharIntoFile(outputFilename, totalNoOfChar)
 
-    else:
-        print("Please enter a valid filename")
+            print("Output file created successfully:"+outputFilename)
+
+        else:
+            print("Please enter a valid filename")
