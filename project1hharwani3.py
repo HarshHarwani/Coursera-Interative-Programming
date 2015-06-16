@@ -40,7 +40,7 @@ def getProcessedWordsList(wordList):
     for word in wordList:
         word = word.lower()
         word = word.strip()
-        word = re.sub("[^a-zA-Z]", "", word);
+        #word = re.sub("[,]", "", word);
         if word is not "":
             processeWordList.append(word)
     return processeWordList
@@ -52,6 +52,7 @@ def buildwordDict(processedWordList):
     wordDict = {}
     for word in processedWordList:
         words = wordDict.keys()
+        word = re.sub("[,:;#.$]", "", word);
         if word in words:
             value = wordDict.get(word)
             value += 1
@@ -67,18 +68,19 @@ def getSortedList(wordDict):
     return sortedWordList
 
 
+
 # builds the character dictionary with char as key and their occurences as value
 def buildCharDict(processedWordList):
     charDict = {}
     for word in processedWordList:
         for char in word:
-            keys = charDict.keys()
-            if char in keys:
-                value = charDict.get(char)
-                value += 1
-                charDict.update({char: value})
-            else:
-                charDict.update({char: 1})
+                keys = charDict.keys()
+                if char in keys:
+                    value = charDict.get(char)
+                    value += 1
+                    charDict.update({char: value})
+                else:
+                    charDict.update({char: 1})
     return charDict
 
 
@@ -139,18 +141,33 @@ def writeTotalCharIntoFile(outputFilename, totalNoOfChar):
     fileObject.close()
 
 
-def writeCharFrequency(outputFilename, charFrequencyDict):
-    sortedList=getSortedList(charFrequencyDict)
+def writeCharFrequency(outputFilename, charFrequencyDict,charDict):
+    charList=[]
+    for i in range(97,123):
+        charList.append(chr(i))
+    sortedList=sorted(charFrequencyDict)
     fileObject = open(outputFilename, 'w')
     fileObject.write("Various stastics of the file are as follows:")
     fileObject.write("\n\n")
-    fileObject.write("The characters and their frequency are as follows:")
+    fileObject.write("The characters,their counts and their frequency are as follows:")
     fileObject.write("\n")
     for item in sortedList:
-        fileObject.write(item)
-        fileObject.write("\t")
-        fileObject.write(str(charFrequencyDict.get(item))+"%")
-        fileObject.write("\n")
+        if ord(item)>=97 and ord(item)<=122:
+            charList.remove(item)
+            fileObject.write(item)
+            fileObject.write("\t")
+            fileObject.write(str(charDict.get(item)))
+            fileObject.write("\t")
+            fileObject.write(str(charFrequencyDict.get(item))+"%")
+            fileObject.write("\n")
+    for char in charList:
+            fileObject.write(char)
+            fileObject.write("\t")
+            fileObject.write(str("0"))
+            fileObject.write("\t")
+            fileObject.write(str("0.00%"))
+            fileObject.write("\n")
+
 
 ##
 
@@ -160,12 +177,12 @@ flag = True
 
 ##Main input loop
 while flag:
-    filename = input("Enter the path of the file to be read\n")
-    outputFilename = input("Enter the path of the  output file\n")
+    filename = input("Enter input filename\n")
+    outputFilename = input("Enter output file name\n")
     if filename==outputFilename:
         print("Input and output file can't be same")
 
-    if filename != "" and len(filename) > 4 and outputFilename != "" and filename!=outputFilename:
+    if filename != "" and outputFilename != "" and filename!=outputFilename:
         flag = False
 
         # retieving the lines from the file.
@@ -190,7 +207,7 @@ while flag:
             charDict = buildCharDict(processedWordList)
 
             # sorting the dictionary to get frequency of the characters as percentage
-            sortedCharList = getSortedList(charDict)
+            sortedCharList = sorted(charDict)
 
             # getting the total no of non-white space characters.
             totalNoOfChar = getTotalNoChar(charDict)
@@ -199,7 +216,7 @@ while flag:
             charFrequencyDict = getFrequencyPerc(sortedCharList, charDict, totalNoOfChar)
 
             # writing the frequency of different characters in the file
-            writeCharFrequency(outputFilename, charFrequencyDict)
+            writeCharFrequency(outputFilename, charFrequencyDict,charDict)
 
             # writing the top 10 words in the file
             writeTop10intoFile(outputFilename, sortedWordList, wordDict)
