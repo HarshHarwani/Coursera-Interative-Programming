@@ -5,13 +5,12 @@ import commands
 def getIdenticalFiles():
 	fileList=[]
 	AllFilesList=[]
-	for files in os.walk("./"):
-		fileList.append(files)
-	for items in fileList:
-		AllFilesList.append(items[2])
-
+	for dirname,dirnames,filenames in os.walk('./'):
+	    for file in filenames:
+	    	filePath = os.path.join(dirname, file)
+	        AllFilesList.append(filePath)
+	
 	finalFileList=flatten(AllFilesList)
-	print "List of all the files in the current directory:\n",finalFileList
 	identicalFileList=[]
 	for i in range(0,len(finalFileList)):
 		x=finalFileList.__getitem__(i)
@@ -33,20 +32,17 @@ def getIdenticalFiles():
 	print "\n\n"
 
 
-
 def getFilesAfterModifiedDate(dateString):
-        fileList=[]
         AllFilesList=[]
         modifyfileList=[]
-        for files in os.walk("./"):
-                fileList.append(files)
-        for items in fileList:
-                AllFilesList.append(items[2])
+	for dirname, dirnames, filenames in os.walk('./'):
+		for filename in filenames:
+			filePath = os.path.join(dirname, filename)
+			AllFilesList.append(filePath)
 
-        finalFileList=flatten(AllFilesList)
-        for i in range(0,len(finalFileList)):
+        for i in range(0,len(AllFilesList)):
                 result=""
-                x=finalFileList.__getitem__(i)
+                x=AllFilesList.__getitem__(i)
                 x.replace("'","")
                 str="stat"+" "+x
                 result=commands.getoutput(str)
@@ -75,6 +71,9 @@ def getFilesAfterModifiedDate(dateString):
 		print "There are no files which have been modified after the given date "+dateString
 	print "\n\n"
 
+
+
+
 flag=True
 while flag:
 	print("\n")
@@ -102,4 +101,3 @@ while flag:
 				print("\n\n")
 	except ValueError as err:
 		print "Please enter a number  1 or 2 or 3" 
-
