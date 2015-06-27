@@ -32,15 +32,22 @@ left_direction=False
 def spawn_ball(direction):
     global ball_pos, ball_vel # these are vectors stored as lists
     ball_pos=[WIDTH/2,HEIGHT/2]
+   #if going upper left decrease both the horizontal(x) and vertical velocities
     if direction:
         ball_vel[0]=-1*random.randrange(2, 4)
         ball_vel[1]=-1*random.randrange(1, 3)
+   #if going upper right increase horizontal(x) and decrease vertical velocity
     else:
         ball_vel[0]=random.randrange(2, 4)
         ball_vel[1]=-1*random.randrange(1,3)
 
 def update_paddles():
     global paddle1_pos,paddle2_pos,paddle1_vel,paddle2_vel,paddle_vel_change
+   # if the paddle has reached either ends moving the paddle in opposite direction to stop
+   # further movement in that direction
+   #when paddle is moved up we decrrease the y component , but when we reach the upper end  
+   # we increase the velocity so effectively change becomes zero and paddle stays in position
+   #same in case where paddle reaches lower end.
     if paddle1_pos < HALF_PAD_HEIGHT:
         paddle1_pos +=paddle_vel_change
     elif paddle1_pos > (HEIGHT-HALF_PAD_HEIGHT):
@@ -60,8 +67,10 @@ def update_ball():
     collision_down_wall=False
     ball_pos[0]+=ball_vel[0]
     ball_pos[1]+=ball_vel[1]
+    #checking if ball hits top wall
     if ball_pos[1]<=BALL_RADIUS:
         collision_top_wall=True
+    #checking if ball hits bottom wall
     if ball_pos[1]>=(HEIGHT-1)-BALL_RADIUS:
         collision_down_wall=True
     if collision_top_wall or collision_down_wall:
@@ -83,6 +92,7 @@ def draw(canvas):
     canvas.draw_line([PAD_WIDTH, 0],[PAD_WIDTH, HEIGHT], 1, "White")
     canvas.draw_line([WIDTH - PAD_WIDTH, 0],[WIDTH - PAD_WIDTH, HEIGHT], 1, "White")
     
+    #updating and drawing paddles
     update_paddles()
     padd1_top=paddle1_pos-HALF_PAD_HEIGHT
     padd1_bottom=paddle1_pos+HALF_PAD_HEIGHT
@@ -95,16 +105,16 @@ def draw(canvas):
     # update ball
     update_ball()
     canvas.draw_circle(ball_pos, BALL_RADIUS, 1, "Red","Red")
+    #checking if ball hits left or right gutters
     coll_left=ball_pos[0]<=BALL_RADIUS+PAD_WIDTH
     coll_right=ball_pos[0]>=(WIDTH-1)-BALL_RADIUS-PAD_WIDTH
+    #checking to see if ball hits the paddle for that we check if the y-co-ordinate of the center of circle lies in the y-co-ordinate range of the paddle and x-co-ordinate is less than the radius of the circle
     onpaddle1 = (padd1_top <= ball_pos[1] <= padd1_bottom) and coll_left
     onpaddle2 = (padd2_top <= ball_pos[1] <= padd2_bottom) and coll_right
-    onpaddle_right = onpaddle2 and coll_right
-    onpaddle_left = onpaddle1 and coll_left
-    onpaddle = onpaddle_right or onpaddle_left
-    if(onpaddle):
+    if(onpaddle1 or onpaddle2):
         ball_vel[0]*=-1.1
         ball_vel[1]*=1.1
+    #updating the score depending on which side the ball hits the gutters
     elif coll_left:
             score2+=1
             left_direction=False
@@ -113,18 +123,9 @@ def draw(canvas):
             score1+=1
             left_direction=True
             spawn_ball(left_direction)
+    #draw scores	
     canvas.draw_text(str(score1), score1_pos, 40, "Blue")
     canvas.draw_text(str(score2), score2_pos, 40, "Blue")
-    
-    # update paddle's vertical position, keep paddle on the screen
- 
-     
-  
-    # draw paddle
-
-    # determine whether paddle and ball collide    
-    
-    # draw scores
         
 def keydown(key):
     global paddle1_vel, paddle2_vel
