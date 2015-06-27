@@ -1,4 +1,4 @@
-#implementation of classic arcade game Pong
+mplementation of classic arcade game Pong
 
 import simplegui
 import random
@@ -27,6 +27,7 @@ ball_vel=[1,1]
 LEFT = True
 RIGHT = True
 left_direction=False
+
 # initialize ball_pos and ball_vel for new bal in middle of table
 # if direction is RIGHT, the ball's velocity is upper right, else upper left
 def spawn_ball(direction):
@@ -78,20 +79,29 @@ def update_ball():
        
 # define event handlers
 def new_game():
-    global paddle1_pos, paddle2_pos, paddle1_vel, paddle2_vel,direction  # these are numbers
+    global paddle1_pos, paddle2_pos, paddle1_vel, paddle2_vel,left_direction  # these are numbers
     global score1, score2  # these are ints
-    spawn_ball(left_direction)
+    #setting all variable to initial positions
+    score1=0
+    score2=0
+    f=[True,False]
+    spawn_ball(random.choice(f))
+    ball_pos=[WIDTH/2,HEIGHT/2]
+    paddle1_pos=HEIGHT/2
+    paddle2_pos=HEIGHT/2
+    paddle1_vel=0
+    paddle2_vel=0
     
-
+def restart():
+    #restarting the game
+    new_game()
+    
 def draw(canvas):
     global direction,score1, score2, paddle1_pos,ball_pos,paddle2_pos, ball_pos, ball_vel,padd1_top,padd2_top,padd1_bottom,padd2_bottom
- 
-      
     # draw mid line and gutters
     canvas.draw_line([WIDTH / 2, 0],[WIDTH / 2, HEIGHT], 1, "White")
     canvas.draw_line([PAD_WIDTH, 0],[PAD_WIDTH, HEIGHT], 1, "White")
     canvas.draw_line([WIDTH - PAD_WIDTH, 0],[WIDTH - PAD_WIDTH, HEIGHT], 1, "White")
-    
     #updating and drawing paddles
     update_paddles()
     padd1_top=paddle1_pos-HALF_PAD_HEIGHT
@@ -100,8 +110,6 @@ def draw(canvas):
     padd2_bottom=paddle2_pos+HALF_PAD_HEIGHT
     canvas.draw_line([HALF_PAD_WIDTH,padd1_top],[HALF_PAD_WIDTH,padd1_bottom], PAD_WIDTH, "Yellow")
     canvas.draw_line([WIDTH-HALF_PAD_WIDTH,padd2_top],[WIDTH-HALF_PAD_WIDTH,padd2_bottom], PAD_WIDTH, "Yellow")
-     
-   
     # update ball
     update_ball()
     canvas.draw_circle(ball_pos, BALL_RADIUS, 1, "Red","Red")
@@ -155,6 +163,7 @@ frame = simplegui.create_frame("Pong", WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
 frame.set_keydown_handler(keydown)
 frame.set_keyup_handler(keyup)
+frame.add_button("Restart Game", restart, 150)
 
 
 # start frame
