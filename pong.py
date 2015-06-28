@@ -1,11 +1,11 @@
-mplementation of classic arcade game Pong
+#implementation of classic arcade game Pong
 
 import simplegui
 import random
 
 # initialize globals - pos and vel encode vertical info for paddles
 WIDTH = 600
-HEIGHT = 400       
+HEIGHT = 400
 BALL_RADIUS = 20
 PAD_WIDTH = 8
 PAD_HEIGHT = 80
@@ -27,6 +27,9 @@ ball_vel=[1,1]
 LEFT = True
 RIGHT = True
 left_direction=False
+pauseFlag=False
+vel_list=[]
+
 
 # initialize ball_pos and ball_vel for new bal in middle of table
 # if direction is RIGHT, the ball's velocity is upper right, else upper left
@@ -46,7 +49,7 @@ def update_paddles():
     global paddle1_pos,paddle2_pos,paddle1_vel,paddle2_vel,paddle_vel_change
    # if the paddle has reached either ends moving the paddle in opposite direction to stop
    # further movement in that direction
-   #when paddle is moved up we decrrease the y component , but when we reach the upper end  
+   #when paddle is moved up we decrrease the y component , but when we reach the upper end
    # we increase the velocity so effectively change becomes zero and paddle stays in position
    #same in case where paddle reaches lower end.
     if paddle1_pos < HALF_PAD_HEIGHT:
@@ -61,7 +64,7 @@ def update_paddles():
         paddle2_pos -=paddle_vel_change
     else:
         paddle2_pos += paddle2_vel
-        
+
 def update_ball():
     global ball_vel,ball_pos
     collision_top_wall=False
@@ -76,7 +79,7 @@ def update_ball():
         collision_down_wall=True
     if collision_top_wall or collision_down_wall:
         ball_vel[1]=-1*ball_vel[1]
-       
+
 # define event handlers
 def new_game():
     global paddle1_pos, paddle2_pos, paddle1_vel, paddle2_vel,left_direction  # these are numbers
@@ -91,11 +94,21 @@ def new_game():
     paddle2_pos=HEIGHT/2
     paddle1_vel=0
     paddle2_vel=0
-    
+
 def restart():
     #restarting the game
     new_game()
-    
+
+def pause():
+    global vel_list,ball_vel,pauseFlag
+    if ball_vel!=[1,1]:
+        pauseFlag=True
+        ball_vel=[0,0]
+        vel_list.extend(ball_vel)
+    else:
+        pauseFlag=False
+        ball_vel=vel_list
+
 def draw(canvas):
     global direction,score1, score2, paddle1_pos,ball_pos,paddle2_pos, ball_pos, ball_vel,padd1_top,padd2_top,padd1_bottom,padd2_bottom
     # draw mid line and gutters
@@ -131,21 +144,34 @@ def draw(canvas):
             score1+=1
             left_direction=True
             spawn_ball(left_direction)
-    #draw scores	
+    #draw scores
     canvas.draw_text(str(score1), score1_pos, 40, "Blue")
     canvas.draw_text(str(score2), score2_pos, 40, "Blue")
-        
+
 def keydown(key):
-    global paddle1_vel, paddle2_vel
+    global paddle1_vel, paddle2_vel,pauseFlag
     if key==simplegui.KEY_MAP["w"]:
-        paddle1_vel-=paddle_vel_change
+        if not pauseFlag:
+            paddle1_vel-=paddle_vel_change
+        else:
+            paddle1_vel=0
     elif key==simplegui.KEY_MAP["s"]:
-        paddle1_vel+=paddle_vel_change
+        if not pauseFlag:
+            paddle1_vel+=paddle_vel_change
+        else:
+            paddle1_vel=0
     elif key==simplegui.KEY_MAP["up"]:
-        paddle2_vel-=paddle_vel_change
+        if not pauseFlag:
+            paddle2_vel-=paddle_vel_change
+        else:
+            paddle2_vel=0
     elif key==simplegui.KEY_MAP["down"]:
-        paddle2_vel+=paddle_vel_change
-        
+        if not pauseFlag:
+            paddle2_vel+=paddle_vel_change
+        else:
+            paddle2_vel=0
+
+
 def keyup(key):
     global paddle1_vel, paddle2_vel
     if key==simplegui.KEY_MAP["w"]:
@@ -164,9 +190,9 @@ frame.set_draw_handler(draw)
 frame.set_keydown_handler(keydown)
 frame.set_keyup_handler(keyup)
 frame.add_button("Restart Game", restart, 150)
+frame.add_button("Pause/Unpause", pause, 150)
 
 
 # start frame
 new_game()
 frame.start()
-
