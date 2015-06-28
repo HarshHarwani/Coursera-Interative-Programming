@@ -23,7 +23,7 @@ score2_pos = [540,40]
 score1=0
 score2=0
 ball_pos=[WIDTH/2,HEIGHT/2]
-ball_vel=[1,1]
+ball_vel=[0,0]
 LEFT = True
 RIGHT = True
 left_direction=False
@@ -83,7 +83,7 @@ def update_ball():
 # define event handlers
 def new_game():
     global paddle1_pos, paddle2_pos, paddle1_vel, paddle2_vel,left_direction  # these are numbers
-    global score1, score2  # these are ints
+    global score1, score2,pauseFlag  # these are ints
     #setting all variable to initial positions
     score1=0
     score2=0
@@ -94,6 +94,7 @@ def new_game():
     paddle2_pos=HEIGHT/2
     paddle1_vel=0
     paddle2_vel=0
+    pauseFlag=False
 
 def restart():
     #restarting the game
@@ -101,13 +102,13 @@ def restart():
 
 def pause():
     global vel_list,ball_vel,pauseFlag
-    if ball_vel!=[1,1]:
+    if ball_vel!=[0,0]:
         pauseFlag=True
-        ball_vel=[0,0]
         vel_list.extend(ball_vel)
-    else:
-        pauseFlag=False
+        ball_vel=[0,0]
+    elif ball_vel==[0,0]:
         ball_vel=vel_list
+        pauseFlag=False
 
 def draw(canvas):
     global direction,score1, score2, paddle1_pos,ball_pos,paddle2_pos, ball_pos, ball_vel,padd1_top,padd2_top,padd1_bottom,padd2_bottom
