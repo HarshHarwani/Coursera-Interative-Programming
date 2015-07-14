@@ -10,7 +10,7 @@ Player-1 uses key "w" and "s" to move the paddle up and down respectively, Playe
 -------------------------------------------
 
 ##wanna flex your memory muscles? give this simple memory game a try here:
-http://www.codeskulptor.org/#user40_Uuin8HNVHi_1.pyee
+http://www.codeskulptor.org/#user40_Lt5xLI1FZh_1.py
 
 just flip the cards using the mouse, enjoy :)
 
