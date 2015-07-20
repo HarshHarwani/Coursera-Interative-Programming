@@ -1,5 +1,7 @@
 # Coursera-Interative-Programming
 
+### All the games work best in chrome browser.
+
 ##You can enjoy a little game of pong with your buddy here:
 http://www.codeskulptor.org/#user40_1XXSvSCEaI_11.py
 
