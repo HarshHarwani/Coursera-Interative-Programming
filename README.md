@@ -17,3 +17,9 @@ http://www.codeskulptor.org/#user40_IOmqWvcdvz_0.py
 just flip the cards using the mouse, enjoy :)
 
 ![Pong Game](/memory.png)
+
+
+##In the mood of some gambling? give this simple Black-Jack game a try here:
+http://www.codeskulptor.org/#user40_nurSkWfbI0_10.py
+
+![BlackJack Game](/BlackJack.png)
