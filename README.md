@@ -20,6 +20,6 @@ just flip the cards using the mouse, enjoy :)
 
 
 ##In the mood of some gambling? give this simple Black-Jack game a try here:
-http://www.codeskulptor.org/#user40_nurSkWfbI0_10.py
+http://www.codeskulptor.org/#user40_nurSkWfbI0_12.py
 
 ![BlackJack Game](/BlackJack.png)
