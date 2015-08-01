@@ -195,8 +195,10 @@ def draw(canvas):
     canvas.draw_image(debris_image, center, size, (wtime - WIDTH / 2, HEIGHT / 2), (WIDTH, HEIGHT))
     canvas.draw_image(debris_image, center, size, (wtime + WIDTH / 2, HEIGHT / 2), (WIDTH, HEIGHT))
 
-    canvas.draw_text('Score:', (575, 100), 35, 'White')
-    canvas.draw_text('Lives:', (75, 100), 35, 'White')
+    canvas.draw_text('Score:', (575, 100), 25, 'White')
+    canvas.draw_text(str(score), (650, 100), 25, 'White')
+    canvas.draw_text('Lives:', (75, 100), 25, 'White')
+    canvas.draw_text(str(lives), (150, 100), 25, 'White')
     # draw ship and sprites
     my_ship.draw(canvas)
     a_rock.draw(canvas)
@@ -213,7 +215,12 @@ def rock_spawner():
     global a_rock
     a_rock.pos=[random.randrange(0, WIDTH),random.randrange(0, HEIGHT)]
     a_rock.vel=[random.random()*0.8+0.1,random.random()*0.8+0.1]
-    a_rock.angle_vel=random.random() * 0.1 + 0.05
+    # just a hack to get anti-clockwise rotation, need to think of a better approach
+    var=random.random()
+    if var > 0.5:
+        a_rock.angle_vel=var * 0.01 + 0.05
+    else:
+        a_rock.angle_vel=-(var * 0.01 + 0.05)
 
 
 
@@ -241,7 +248,7 @@ def keyup(key):
 frame = simplegui.create_frame("Asteroids", WIDTH, HEIGHT)
 
 # initialize ship and two sprites
-my_ship = Ship([WIDTH / 2, HEIGHT / 2], [0, 0], 0, ship_image, ship_info)
+my_ship = Ship([WIDTH / 2, HEIGHT / 2], [0.5, 0], 0, ship_image, ship_info)
 a_rock = Sprite([WIDTH / 3, HEIGHT / 3], [1, 1], 0, 0.1, asteroid_image, asteroid_info)
 a_missile = Sprite([2 * WIDTH / 3, 2 * HEIGHT / 3], [-1,1], 0, 0, missile_image, missile_info, missile_sound)
 
