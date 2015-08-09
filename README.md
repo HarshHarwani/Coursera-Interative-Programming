@@ -1,5 +1,6 @@
 # Coursera-Interative-Programming
 
+### All the games work best in chrome browser.
 
 ##want to blast some asteroids? give this simple Asteroids game a try here:
 http://www.codeskulptor.org/#user40_nkavnBY1k3_51.py
@@ -10,7 +11,6 @@ http://www.codeskulptor.org/#user40_nkavnBY1k3_51.py
 ![Asteroids Game](/asteroids2.png)
 ![Asteroids Game](/asteroids3.png)
 
-### All the games work best in chrome browser.
 
 ##You can enjoy a little game of pong with your buddy here:
 http://www.codeskulptor.org/#user40_1XXSvSCEaI_11.py
