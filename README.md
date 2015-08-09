@@ -23,3 +23,12 @@ just flip the cards using the mouse, enjoy :)
 http://www.codeskulptor.org/#user40_u2q7Gebheg_3.py
 
 ![BlackJack Game](/BlackJack.png)
+
+-------------------------------------------
+
+##want to blast some asteroids? give this simple Asteroids game a try here:
+http://www.codeskulptor.org/#user40_nkavnBY1k3_51.py
+
+![Asteroids Game](/asteroids1.png)
+![Asteroids Game](/asteroids2.png)
+![Asteroids Game](/asteroids3.png)
